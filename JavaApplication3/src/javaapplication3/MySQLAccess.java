@@ -6,7 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import javaapplication3.panelDatos;
 
 public class MySQLAccess {
     private Connection connect = null;
@@ -27,45 +30,53 @@ public class MySQLAccess {
             statement = connect.createStatement();
             // Result set get the result of the SQL query
             resultSet = statement
-                    .executeQuery("select * from feedback.comments");
-            writeResultSet(resultSet);
+                    .executeQuery("select * from feedback.clientes");
 
             // PreparedStatements can use variables and are more efficient
+            
             preparedStatement = connect
-                    .prepareStatement("insert into  feedback.comments values (default, ?, ?, ?, ? , ?, ?)");
-            // "myuser, webpage, datum, summary, COMMENTS from feedback.comments");
-            // Parameters start with 1
-            preparedStatement.setString(1, "Test");
-            preparedStatement.setString(2, "TestEmail");
-            preparedStatement.setString(3, "TestWebpage");
-            preparedStatement.setDate(4, new java.sql.Date(2009, 12, 11));
-            preparedStatement.setString(5, "TestSummary");
-            preparedStatement.setString(6, "TestComment");
-            preparedStatement.executeUpdate();
-
-            preparedStatement = connect
-                    .prepareStatement("SELECT myuser, webpage, datum, summary, COMMENTS from feedback.comments");
+                    .prepareStatement("SELECT User, Datum , summary, COMMENTS from feedback.clientes");
             resultSet = preparedStatement.executeQuery();
             writeResultSet(resultSet);
 
             // Remove again the insert comment
-            preparedStatement = connect
-            .prepareStatement("delete from feedback.comments where myuser= ? ; ");
+           /* preparedStatement = connect
+            .prepareStatement("delete from feedback.clientes where user= ? ; ");
             preparedStatement.setString(1, "Test");
             preparedStatement.executeUpdate();
-
-            resultSet = statement
-            .executeQuery("select * from feedback.comments");
+*/
+        /*    resultSet = statement
+            .executeQuery("select * from feedback.clientes");
             writeMetaData(resultSet);
-
+*/
+        
         } catch (Exception e) {
             throw e;
-        } finally {
+        } /*finally {
             close();
-        }
+        }*/
 
     }
-
+    public void guardar(String usuario, String sumario, String comments) throws SQLException {
+    try{
+                preparedStatement = connect
+                    .prepareStatement("insert into  feedback.clientes values (default, ?, ?, ?, ?)");
+            // "myuser, webpage, datum, summary, COMMENTS from feedback.comments");
+            // Parameters start with 1
+            LocalDate localDate = LocalDate.now();
+            Date date = java.sql.Date.valueOf(localDate);
+            System.out.println(date);
+            preparedStatement.setString(1, usuario);
+          //  preparedStatement.setString(2, "TestEmail");
+           // preparedStatement.setString(3, "TestWebpage");
+            preparedStatement.setDate(2, (java.sql.Date) date);
+            preparedStatement.setString(3, sumario);
+            preparedStatement.setString(4, comments);
+            preparedStatement.executeUpdate();
+    } catch(Exception e) {
+    e.printStackTrace();
+    }
+    }
     private void writeMetaData(ResultSet resultSet) throws SQLException {
         //  Now get some metadata from the database
         // Result set get the result of the SQL query
@@ -85,16 +96,17 @@ public class MySQLAccess {
             // also possible to get the columns via the column number
             // which starts at 1
             // e.g. resultSet.getSTring(2);
-            String user = resultSet.getString("myuser");
-            String website = resultSet.getString("webpage");
+        /*   String user = resultSet.getString("user");
+          //  String website = resultSet.getString("webpage");
             String summary = resultSet.getString("summary");
             Date date = resultSet.getDate("datum");
             String comment = resultSet.getString("comments");
             System.out.println("User: " + user);
-            System.out.println("Website: " + website);
+          //  System.out.println("Website: " + website);
             System.out.println("summary: " + summary);
             System.out.println("Date: " + date);
-            System.out.println("Comment: " + comment);
+            System.out.println("Comment: " + comment);*/
+            
         }
     }
 

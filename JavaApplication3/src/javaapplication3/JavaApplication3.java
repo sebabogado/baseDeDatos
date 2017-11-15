@@ -14,9 +14,11 @@ public class JavaApplication3 {
     
     public static void main(String[] args) throws Exception{
         // TODO code application logic here
+       // System.out.println("hola mundo");
+        panelDatos Ventana=new panelDatos();
+        Ventana.setVisible(true);
        
-        MySQLAccess dao = new MySQLAccess();
-        dao.readDataBase();
+        
     }
 
 }
